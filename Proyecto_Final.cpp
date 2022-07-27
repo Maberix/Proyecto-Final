@@ -1,5 +1,6 @@
 #include <iostream>
 
+
 using namespace std;
 
 class Contacto{
@@ -172,6 +173,7 @@ public:
 		{
 			if (recorrido->getDato().getDni() == Dni)
 			{
+				cout << "\nContacto encontrado: " << endl;
 				recorrido->imprimir();
 				encontrado = true;
 				break;
@@ -195,6 +197,7 @@ public:
 		{
 			if (recorrido->getDato().getNombres() == Nombres)
 			{
+				cout << "\nContacto encontrado: " << endl;
 				recorrido->imprimir();
 				encontrado = true;
 				break;
@@ -218,6 +221,7 @@ public:
 		{
 			if (recorrido->getDato().getApellidos() == Apellidos)
 			{
+				cout << "\nContacto encontrado: " << endl;
 				recorrido->imprimir();
 				encontrado = true;
 				break;
@@ -241,7 +245,31 @@ public:
 		{
 			if (recorrido->getDato().getF_nac() == F_nac)
 			{
+			    	cout << "\nContacto encontrado: " << endl;
 				recorrido->imprimir();
+				encontrado = true;
+				break;
+			}
+			else
+			{
+				recorrido = recorrido->getEnlace();
+			}
+		}
+		if (encontrado == false)
+		{
+			cout << "El elemento buscado no fue encontrado." << endl;
+		}
+	}
+
+	void ModificarContacto(string Nombres)
+	{
+	    bool encontrado = false;
+		Nodo* recorrido = inicio;
+		while (recorrido != NULL)
+		{
+			if (recorrido->getDato().getNombres() == Nombres)
+			{
+			    cout<<"Ingrese los nuevos datos:"<<endl;
 				encontrado = true;
 				break;
 			}
@@ -299,6 +327,7 @@ void MostrarMenu()
 	cout << "2.- Añadir Contacto" << endl;
 	cout << "3.- Buscar Contacto" << endl;
 	cout << "4.- Eliminar Contacto en la posición" << endl;
+	cout << "5.- Modificar Contacto" << endl;
 	cout << "0.- Salir" << endl;
 }
 
@@ -314,39 +343,39 @@ void MostrarMenu2()
 Contacto LeerDatosContacto()
 {
 	Contacto contacto = Contacto();
-	string temporal;
+	string temp;
 
 	cout << "\n\nIngrese DNI: ";
-	cin >> temporal;
-	contacto.setDni(temporal);
+	cin >> temp;
+	contacto.setDni(temp);
 
-	cout << "\nIngrese Nombres: ";
-	cin >> temporal;
-	contacto.setNombres(temporal);
+	cout << "Ingrese Nombres: ";
+	cin >> temp;
+	contacto.setNombres(temp);
 
-	cout << "\nIngrese Apellidos: ";
-	cin >> temporal;
-	contacto.setApellidos(temporal);
+	cout << "Ingrese Apellidos: ";
+	cin >> temp;
+	contacto.setApellidos(temp);
 
-	cout << "\nIngrese Sexo: ";
-	cin >> temporal;
-	contacto.setSexo(temporal);
+	cout << "Ingrese Sexo: ";
+	cin >> temp;
+	contacto.setSexo(temp);
 
-	cout << "\nIngrese Fecha de Nacimiento: ";
-	cin >> temporal;
-	contacto.setF_nac(temporal);
+	cout << "Ingrese Fecha de Nacimiento: ";
+	cin >> temp;
+	contacto.setF_nac(temp);
 
-	cout << "\nIngrese Correo: ";
-	cin >> temporal;
-	contacto.setCorreo(temporal);
+	cout << "Ingrese Correo: ";
+	cin >> temp;
+	contacto.setCorreo(temp);
 
-	cout << "\nIngrese Telefono: ";
-	cin >> temporal;
-	contacto.setTelefono(temporal);
+	cout << "Ingrese Telefono: ";
+	cin >> temp;
+	contacto.setTelefono(temp);
 
-	cout << "\nIngrese Direccion: ";
-	cin >> temporal;
-	contacto.setDireccion(temporal);
+	cout << "Ingrese Direccion: ";
+	cin >> temp;
+	contacto.setDireccion(temp);
 
 	return contacto;
 }
@@ -355,10 +384,7 @@ int main()
 {
     Lista agenda = Lista();
 	int posicion;
-	string Dni;
-	string Nombres;
-	string Apellidos;
-	string F_nac;
+	string Dni, Nombres, Apellidos, F_nac;
 	Contacto elemento = Contacto();
 	int opcion, opcion2;
 	do
@@ -374,7 +400,11 @@ int main()
 			agenda.Imprimir();
 			break;
 		case 2:
+		    FILE* archivo;
+		    archivo = fopen("Contactos.txt","wt");
 			agenda.InsertarContacto(LeerDatosContacto());
+			//fwrite(Contacto,archivo);
+			fclose(archivo);
 			break;
 		case 3:
 		    MostrarMenu2();
@@ -404,13 +434,17 @@ int main()
                 cin >> F_nac;
                 agenda.BuscarContacto04(F_nac);
                 break;
-            } while (opcion != 0);
-
+            };
 			break;
 		case 4:
 			cout << "\n\nDigite posición del contacto: " << endl;
 			cin >> posicion;
 			agenda.EliminarContacto(posicion);
+			break;
+        case 5:
+			cout << "\n\nDigite el nombre del contacto: " << endl;
+			cin >> Nombres;
+			agenda.ModificarContacto(Nombres);
 			break;
 		default:
 			cout << "Opción no valida." << endl;
